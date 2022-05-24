@@ -1,64 +1,300 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Queue-RESTAPI-job-chaning-number-guesser-several-times
+Web application tries to guess a number using a chain of jobs in a queue many times by genereting a random number. It equals a genereted number and a number has configured. If number is not guessed the job returns to queue once again and it will be continued for a number of tries has configured.
+App uses RESTAPI to: direct it, input parameters, get result info, get log info.
+(Used docker configuration info from user 'sagar290', thanks to him).
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Endpoints:
+* GET http://localhost:80/api/app/start  
+  Starts app with the default settings (from .env). Can receive paramaters(all or their combinations):
+    * chain=x, x is number of chain's links
+    * tries=x, x is number of tries in all the chain's links
+    * guess_number=x, x is number app will try to guess in all the chain's links
+    * range[start]=x&range[end]=y, x and y is numbers describes start of the range and end respectively
 
-## About Laravel
+* GET http://localhost:80/api/app/logs
+  Outputs history of trying guess process. Can receive a parameter:
+    * transaction=x, where x is number of transaction you want to see.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* GET http://localhost:80/api/total
+  Outputs result of the guessing process paramters that has used, time of start, end and time was spend.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* GET http://localhost:80/api/result
+  Outputs simple guessing process.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* GET http://localhost:80/api/app/logs/clear
+  Clear all the logs
+```
+Default settings:  
+    Chain legth = 2
+    Tries = 100
+    Guess number = 50
+    Range start = 0
+    Range end = 100
+```
+#Possible start instructions:
+## Up the services
+```
+docker-compose up --build -d
+```
 
-## Learning Laravel
+## Go to the container
+```
+docker exec -it queue-restapi-job-chaning-number-guesser-several-times-app-1 bash
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Run inside the container
+```
+php artisan migrate  
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## HTTP requests to direct the app or them combinations:
+* Start guessing a number which has configured by default with the others default configurations
+```
+GET http://localhost:80/api/start
+Accept: application/json
 
-## Laravel Sponsors
+###
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+* Start guessing a number and chain's links number
+```
+GET http://localhost:80/api/start?guess_number=32&chain=5
+Accept: application/json
 
-### Premium Partners
+###
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+* Start guessing a number and trial number's range
+  from request
+```
+GET http://localhost:80/api/start?range[start]=0&range[end]=200
+Accept: application/json
 
-## Contributing
+###
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* Start guessing a number and trial number's range
+```
+GET http://localhost:80/api/start?guess_number=32&range[start]=0&range[end]=200
+Accept: application/json
 
-## Code of Conduct
+###
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* Start guessing a number with tries, range
+```
+GET http://localhost:80/api/start?tries=100&guess_number=32&range[start]=0&range[end]=200
+Accept: application/json
 
-## Security Vulnerabilities
+###
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* View the logs of all transactions
+```
+GET http://localhost:80/api/logs
+Accept: application/json
 
-## License
+###
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* View the logs of tries for transaction 1652350657
+```
+GET http://localhost:80/api/logs?transaction=1652350657
+Accept: application/json
+
+###
+```
+
+* View the totals all transaction
+```
+GET http://localhost:80/app/total
+Accept: application/json
+
+###
+```
+
+* View the simple result
+```
+GET http://localhost:80/api/result
+Accept: application/json
+
+###
+```
+
+* Clear all the logs
+```
+GET http://localhost:80/api/logs/clear
+Accept: application/json
+
+###
+```
+
+## Down services if you are exit
+```
+docker-compose down
+```
+
+## Some demostration:
+```
+GET http://localhost:80/api/start
+
+HTTP/1.1 200 OK
+Server: nginx/1.21.6
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/8.0.2
+Cache-Control: no-cache, private
+Date: Tue, 17 May 2022 09:30:59 GMT
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+Access-Control-Allow-Origin: *
+
+Started,  Args: tries = 100 guessNumber = 51 start = 0 end = 100 chainLength = 2
+
+Response code: 200 (OK); Time: 321ms; Content length: 80 bytes
+
+
+GET http://localhost:80/api/app/total
+
+HTTP/1.1 200 OK
+Server: nginx/1.21.6
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/8.0.2
+Cache-Control: no-cache, private
+Date: Sat, 14 May 2022 07:50:07 GMT
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+Access-Control-Allow-Origin: *
+
+[
+  {
+    "transaction": 1652514523,
+    "guess number": 50,
+    "status": "OK",
+    "used tries": 45,
+    "params": {
+      "backoff": 0,
+      "tries": 100,
+      "guessNumber": 50,
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    "start date": "2022-05-14 07:48:43",
+    "end date": "2022-05-14 07:48:47",
+    "completion time": "00:00:04"
+  }
+]
+
+Response code: 200 (OK); Time: 356ms; Content length: 255 bytes
+
+GET http://localhost:80/api/result
+
+HTTP/1.1 200 OK
+Server: nginx/1.21.6
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/8.0.2
+Cache-Control: no-cache, private
+Date: Tue, 17 May 2022 08:36:39 GMT
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 55
+Access-Control-Allow-Origin: *
+
+[
+  {
+    "chain length": "5"
+  },
+  {
+    "transaction": 1652776394,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776395,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776396,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776397,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776398,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "chain length": "5"
+  },
+  {
+    "transaction": 1652776478,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776479,
+    "guess number": 50,
+    "status": "Failed"
+  },
+  "Aborted",
+  "Aborted",
+  "Aborted",
+  {
+    "chain length": "5"
+  },
+  {
+    "transaction": 1652776525,
+    "guess number": 50,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776526,
+    "guess number": 50,
+    "status": "Failed"
+  },
+  "Aborted",
+  "Aborted",
+  "Aborted",
+  {
+    "chain length": "2"
+  },
+  {
+    "transaction": 1652776570,
+    "guess number": 51,
+    "status": "OK"
+  },
+  {
+    "transaction": 1652776571,
+    "guess number": 51,
+    "status": "OK"
+  },
+  {
+    "chain length": "5"
+  },
+  {
+    "transaction": 1652776610,
+    "guess number": 32,
+    "status": "Failed"
+  },
+  "Aborted",
+  "Aborted",
+  "Aborted",
+  "Aborted"
+]
+
+Response code: 200 (OK); Time: 259ms; Content length: 926 bytes
+
+```
