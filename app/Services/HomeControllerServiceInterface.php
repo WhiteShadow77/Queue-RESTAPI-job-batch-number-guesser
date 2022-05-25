@@ -3,8 +3,7 @@
 
 namespace App\Services;
 
-use App\Library\BatchHandler;
-use App\Library\BatchHandlerInterface;
+
 use Illuminate\Http\Request;
 
 interface HomeControllerServiceInterface

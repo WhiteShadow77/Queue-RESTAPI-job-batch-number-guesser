@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Library\BatchHandler;
-use App\Library\BatchHandlerInterface;
 use App\Services\HomeControllerService;
 use App\Services\HomeControllerServiceInterface;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,13 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-//        $this->app->singleton(BatchHandlerInterface::class, function(){
-//            return new BatchHandler();
-//        });
-
         $this->app->singleton(HomeControllerServiceInterface::class, function(){
-            return new HomeControllerService(new BatchHandler);
+            return new HomeControllerService;
         });
+
+        JsonResource::withoutWrapping();
     }
 
     /**

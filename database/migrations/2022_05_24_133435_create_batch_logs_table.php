@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::create('batch_logs', function (Blueprint $table) {
             $table->id();
             $table->string('result');
-            $table->foreignId('batch_id')->nullable();
-            $table->foreign('batch_id')->references('id')
+            $table->foreignId('batchId')->nullable();
+            $table->foreign('batchId')->references('id')
                 ->on('batches')->cascadeOnDelete();
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('result_batches');
+        Schema::dropIfExists('batch_logs');
     }
 };

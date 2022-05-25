@@ -3,10 +3,10 @@
 
 namespace App\Services;
 
+use App\Events\StartBatchEvent;
 use App\Http\Resources\BatchLogsResource;
 use App\Http\Resources\JobLogsResource;
 use App\Jobs\GuessJob;
-use App\Library\BatchHandler;
 use App\Models\Batch;
 use App\Models\JobLog;
 use App\Models\Param;
@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Bus;
 
 class HomeControllerService implements HomeControllerServiceInterface
 {
-    protected $batchHandler;
-
-    public function __construct(BatchHandler $batchHandler)
-    {
-        $this->batchHandler = $batchHandler;
-    }
     public function show($request)
     {
         if ($request->has('transaction')) {
@@ -48,12 +42,10 @@ class HomeControllerService implements HomeControllerServiceInterface
             $chain[] = new GuessJob($args);
         }
 
-        $batchId = $this->batchHandler->setBatch($chain);
-
-        session(['batchId' => $batchId]);
+        event(new StartBatchEvent($chain));
 
         \App\Models\Batch::create([
-            'id_batch' => $batchId
+            'id_batch' => session('batchId')
         ]);
 
         $result = ' Args:';
@@ -76,15 +68,15 @@ class HomeControllerService implements HomeControllerServiceInterface
     {
         $batch = Bus::findBatch(session('batchId'));
         //if(!$batch->cancelled()) {
-            \App\Models\Batch::updateOrCreate([
-                'id_batch' => $batch->id
-            ], [
-                'progress' => $batch->progress(),
-                'links' => $batch->totalJobs,
-                'successed' => $batch->processedJobs(),
-                'failed' => $batch->failedJobs,
-                'finished' => $batch->finished()
-            ]);
+        \App\Models\Batch::updateOrCreate([
+            'id_batch' => $batch->id
+        ], [
+            'progress' => $batch->progress(),
+            'links' => $batch->totalJobs,
+            'successed' => $batch->processedJobs(),
+            'failed' => $batch->failedJobs,
+            'finished' => $batch->finished()
+        ]);
         //}
         return BatchLogsResource::collection(\App\Models\Batch::all());
     }

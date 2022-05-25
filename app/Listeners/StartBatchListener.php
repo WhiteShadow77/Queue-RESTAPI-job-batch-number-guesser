@@ -1,39 +1,54 @@
 <?php
 
+namespace App\Listeners;
 
-namespace App\Library;
-
-
+use App\Events\StartBatchEvent;
 use App\Models\BatchLog;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 
-class BatchHandler
+class StartBatchListener
 {
-    public function setBatch(array $chain)
+    /**
+     * Create the event listener.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        $batch = Bus::batch($chain)
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  \App\Events\StartBatchEvent  $event
+     * @return void
+     */
+    public function handle(StartBatchEvent $event)
+    {
+        $batch = Bus::batch($event->chain)
             ->then(function (Batch $batch) {
                 // Все задания успешно завершены ...
                 BatchLog::create([
                     'result' => 'All OK',
-                    'result_id' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
                 ]);
             })->catch(function (Batch $batch, Throwable $e) {
                 // Обнаружено первое проваленное задание из пакета ...
                 BatchLog::create([
                     'result' => 'Failed, '. $e->getMessage(),
-                    'result_id' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
                 ]);
             })->finally(function (Batch $batch) {
                 // Завершено выполнение пакета ...
                 BatchLog::create([
                     'result' => 'Batch finished',
-                    'result_id' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
                 ]);
             })->dispatch();
 
-        return $batch->id;
+        session(['batchId' => $batch->id]);
     }
 }

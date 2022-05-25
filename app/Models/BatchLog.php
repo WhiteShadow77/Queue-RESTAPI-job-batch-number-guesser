@@ -13,7 +13,7 @@ class BatchLog extends Model
 
     protected $fillable = [
         'result',
-        'result_id'
+        'batchId'
     ];
 
     public function batch()
