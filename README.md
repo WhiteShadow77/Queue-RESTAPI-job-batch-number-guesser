@@ -137,7 +137,7 @@ docker-compose down
 
 ## Some demostration:
 ```
-GET http://localhost:80/api/start
+GET http://localhost:80/api/start?jobs=4&tries=10&guess_number=5&range%5Bstart%5D=0&range%5Bend%5D=10
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.6
@@ -146,17 +146,21 @@ Transfer-Encoding: chunked
 Connection: keep-alive
 X-Powered-By: PHP/8.0.2
 Cache-Control: no-cache, private
-Date: Tue, 17 May 2022 09:30:59 GMT
+Date: Thu, 26 May 2022 09:10:27 GMT
 X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 59
+X-RateLimit-Remaining: 58
 Access-Control-Allow-Origin: *
+Set-Cookie: laravel_session=LBsEspiOI33n0GXTyosCAuK806CVGAbVB4kaGhhf; expires=Thu, 26-May-2022 11:10:27 GMT; Max-Age=7200; path=/; httponly; samesite=lax
 
-Started,  Args: tries = 100 guessNumber = 51 start = 0 end = 100 chainLength = 2
+Started,  Args: tries = 10 guessNumber = 5 start = 0 end = 10 jobs = 4 backoff = 0
 
-Response code: 200 (OK); Time: 321ms; Content length: 80 bytes
+Response code: 200 (OK); Time: 503ms; Content length: 82 bytes
 
-
-GET http://localhost:80/api/app/total
+Cookies are preserved between requests:
+> C:\Users\Alexander\PhpstormProjects\Queue-RESTAPI-job-batch-number-guesser\.idea\httpRequests\http-client.cookies
+```
+```
+GET http://localhost:80/api/progress
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.6
@@ -165,35 +169,42 @@ Transfer-Encoding: chunked
 Connection: keep-alive
 X-Powered-By: PHP/8.0.2
 Cache-Control: no-cache, private
-Date: Sat, 14 May 2022 07:50:07 GMT
+Date: Thu, 26 May 2022 08:43:48 GMT
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 59
 Access-Control-Allow-Origin: *
+Set-Cookie: laravel_session=LBsEspiOI33n0GXTyosCAuK806CVGAbVB4kaGhhf; expires=Thu, 26-May-2022 10:43:48 GMT; Max-Age=7200; path=/; httponly; samesite=lax
 
 [
   {
-    "transaction": 1652514523,
-    "guess number": 50,
-    "status": "OK",
-    "used tries": 45,
-    "params": {
-      "backoff": 0,
-      "tries": 100,
-      "guessNumber": 50,
-      "range": {
-        "start": 0,
-        "end": 100
-      }
-    },
-    "start date": "2022-05-14 07:48:43",
-    "end date": "2022-05-14 07:48:47",
-    "completion time": "00:00:04"
+    "id": 6,
+    "batch_id": "9663d067-4c62-4dfd-b89c-dfa5fd749aac",
+    "progress": 67,
+    "jobs": 3,
+    "successed": 2,
+    "failed": 1,
+    "status": "finished"
+  },
+  {
+    "id": 7,
+    "batch_id": "9663d117-6ce2-4f8f-9988-855670688300",
+    "progress": 25,
+    "jobs": 4,
+    "successed": 1,
+    "failed": 0,
+    "status": "not finished"
   }
 ]
 
-Response code: 200 (OK); Time: 356ms; Content length: 255 bytes
+Response code: 200 (OK); Time: 323ms; Content length: 257 bytes
 
-GET http://localhost:80/api/result
+Cookies are preserved between requests:
+> C:\Users\Alexander\PhpstormProjects\Queue-RESTAPI-job-batch-number-guesser\.idea\httpRequests\http-client.cookies
+
+```
+
+```
+GET http://localhost:80/api/progress
 
 HTTP/1.1 200 OK
 Server: nginx/1.21.6
@@ -202,99 +213,27 @@ Transfer-Encoding: chunked
 Connection: keep-alive
 X-Powered-By: PHP/8.0.2
 Cache-Control: no-cache, private
-Date: Tue, 17 May 2022 08:36:39 GMT
+Date: Thu, 26 May 2022 09:43:06 GMT
 X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 55
+X-RateLimit-Remaining: 59
 Access-Control-Allow-Origin: *
+Set-Cookie: laravel_session=LBsEspiOI33n0GXTyosCAuK806CVGAbVB4kaGhhf; expires=Thu, 26-May-2022 11:43:06 GMT; Max-Age=7200; path=/; httponly; samesite=lax
 
 [
   {
-    "chain length": "5"
-  },
-  {
-    "transaction": 1652776394,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776395,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776396,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776397,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776398,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "chain length": "5"
-  },
-  {
-    "transaction": 1652776478,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776479,
-    "guess number": 50,
-    "status": "Failed"
-  },
-  "Aborted",
-  "Aborted",
-  "Aborted",
-  {
-    "chain length": "5"
-  },
-  {
-    "transaction": 1652776525,
-    "guess number": 50,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776526,
-    "guess number": 50,
-    "status": "Failed"
-  },
-  "Aborted",
-  "Aborted",
-  "Aborted",
-  {
-    "chain length": "2"
-  },
-  {
-    "transaction": 1652776570,
-    "guess number": 51,
-    "status": "OK"
-  },
-  {
-    "transaction": 1652776571,
-    "guess number": 51,
-    "status": "OK"
-  },
-  {
-    "chain length": "5"
-  },
-  {
-    "transaction": 1652776610,
-    "guess number": 32,
-    "status": "Failed"
-  },
-  "Aborted",
-  "Aborted",
-  "Aborted",
-  "Aborted"
+    "id": 5,
+    "batch_id": "9663e3dd-6f68-458e-8aee-f0e1c64539ee",
+    "progress": 60,
+    "jobs": 10,
+    "successed": 6,
+    "failed": 4,
+    "status": "not finished"
+  }
 ]
 
-Response code: 200 (OK); Time: 259ms; Content length: 926 bytes
+Response code: 200 (OK); Time: 474ms; Content length: 133 bytes
+
+Cookies are preserved between requests:
+> C:\Users\Alexander\PhpstormProjects\Queue-RESTAPI-job-batch-number-guesser\.idea\httpRequests\http-client.cookies
 
 ```

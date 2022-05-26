@@ -20,7 +20,7 @@ class BatchLogsResource extends JsonResource
             if ($this->status) {
                 $status = 'finished';
             } else {
-                $status = 'in process';
+                $status = 'not finished';
             }
         }
         return [

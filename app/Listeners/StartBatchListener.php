@@ -47,7 +47,7 @@ class StartBatchListener
                     'result' => 'Batch finished',
                     'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
                 ]);
-            })->dispatch();
+            })->allowFailures()->dispatch();
 
         session(['batchId' => $batch->id]);
     }
