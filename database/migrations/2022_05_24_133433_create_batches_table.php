@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('id_batch')->nullable();
             $table->integer('progress')->nullable();
-            $table->integer('links')->nullable();
+            $table->integer('jobs')->nullable();
             $table->integer('successed')->nullable();
             $table->integer('failed')->nullable();
-            $table->boolean('finished')->default(0);
+            $table->boolean('status')->default(0);
             $table->boolean('canceled')->default(0);
             $table->timestamps();
         });

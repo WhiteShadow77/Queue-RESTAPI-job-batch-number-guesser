@@ -35,10 +35,10 @@ class HomeControllerService implements HomeControllerServiceInterface
                 'end' => $request->range['end'] ?? config('guessjob.rangeEnd'),
             ];
 
-        $args['chainLength'] = $request->links ?? config('guessjob.chainLength');
+        $args['jobs'] = $request->jobs ?? config('guessjob.jobs');
         $args['backoff'] = $request->backoff ?? config('guessjob.backoff');
 
-        for ($i = 1; $i <= $args['chainLength']; $i++) {
+        for ($i = 1; $i <= $args['jobs']; $i++) {
             $chain[] = new GuessJob($args);
         }
 
@@ -66,30 +66,37 @@ class HomeControllerService implements HomeControllerServiceInterface
 
     public function batchInfo()
     {
-        $batch = Bus::findBatch(session('batchId'));
-        //if(!$batch->cancelled()) {
-        \App\Models\Batch::updateOrCreate([
-            'id_batch' => $batch->id
-        ], [
-            'progress' => $batch->progress(),
-            'links' => $batch->totalJobs,
-            'successed' => $batch->processedJobs(),
-            'failed' => $batch->failedJobs,
-            'finished' => $batch->finished()
-        ]);
-        //}
-        return BatchLogsResource::collection(\App\Models\Batch::all());
+        if (!empty(session('batchId'))) {
+            $batch = Bus::findBatch(session('batchId'));
+                \App\Models\Batch::updateOrCreate([
+                    'id_batch' => $batch->id
+                ], [
+                    'progress' => $batch->progress(),
+                    'jobs' => $batch->totalJobs,
+                    'successed' => $batch->processedJobs(),
+                    'failed' => $batch->failedJobs,
+                    'status' => $batch->finished()
+                ]);
+            return BatchLogsResource::collection(\App\Models\Batch::all());
+        } else {
+            return response('Session is over. Try start.', 500);
+        }
     }
 
     public function batchCancel()
     {
-        $batch = Bus::findBatch(session('batchId'));
-        $batch->cancel();
-        \App\Models\Batch::updateOrCreate([
-            'id_batch' => $batch->id
-        ], [
-            'canceled' => true
-        ]);
-        return BatchLogsResource::collection(\App\Models\Batch::all());
+        if (!empty(session('batchId'))) {
+            $batch = Bus::findBatch(session('batchId'));
+            $batch->cancel();
+            \App\Models\Batch::updateOrCreate([
+                'id_batch' => $batch->id
+            ], [
+                'canceled' => true
+            ]);
+            return BatchLogsResource::collection(\App\Models\Batch::all());
+        } else {
+
+            return response('Session is over. Try start.', 500);
+        }
     }
 }

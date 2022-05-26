@@ -14,10 +14,10 @@ class Batch extends Model
     protected $fillable = [
         'progress',
         'id_batch',
-        'links',
+        'jobs',
         'successed',
         'failed',
-        'finished',
+        'status',
         'canceled'
     ];
 

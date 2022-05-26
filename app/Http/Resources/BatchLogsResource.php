@@ -17,7 +17,7 @@ class BatchLogsResource extends JsonResource
         if ($this->canceled) {
             $status = 'canceled';
         } else {
-            if ($this->finished) {
+            if ($this->status) {
                 $status = 'finished';
             } else {
                 $status = 'in process';
@@ -27,7 +27,7 @@ class BatchLogsResource extends JsonResource
             'id' => $this->id,
             'batch_id' => $this->id_batch,
             'progress' => $this->progress,
-            'links' => $this->links,
+            'jobs' => $this->jobs,
             'successed' => $this->successed,
             'failed' => $this->failed,
             'status' => $status,
