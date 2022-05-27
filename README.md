@@ -11,8 +11,8 @@ Having a batch's id user are able to rerun the batch using artisan commands.
 * GET http://localhost:80/api/start  
   Starts app with the default settings (from .env). Can receive paramaters(all or their combinations):
     * jobs=x, x is number of jobs in the batch
-    * tries=x, x is number of tries in all the chain's links
-    * guess_number=x, x is number app will try to guess in all the chain's links
+    * tries=x, x is number of tries for all the jobs
+    * guess_number=x, x is number app will try to guess in all the jobs
     * range[start]=x&range[end]=y, x and y is numbers describes start of the range and end respectively
     * backoff=x, x is time in seconds which queue waits between the jobs.
 
@@ -26,7 +26,7 @@ Having a batch's id user are able to rerun the batch using artisan commands.
 * GET http://localhost:80/api/logs/clear
   Clear all the logs
   
-* GET http://localhost:80/api/logs/cancel
+* GET http://localhost:80/api/cancel
   Cancels the executing.
 ```
 Default settings:  
