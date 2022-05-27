@@ -23,6 +23,6 @@ class Batch extends Model
 
     public function logs()
     {
-        return $this->hasMany(BatchLog::class);
+        return $this->hasMany(BatchLog::class, 'batchId');
     }
 }

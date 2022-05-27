@@ -15,6 +15,7 @@ return new class extends Migration {
         Schema::create('batch_logs', function (Blueprint $table) {
             $table->id();
             $table->string('result');
+            $table->string('message')->nullable();
             $table->foreignId('batchId')->nullable();
             $table->foreign('batchId')->references('id')
                 ->on('batches')->cascadeOnDelete();

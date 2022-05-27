@@ -85,18 +85,20 @@ class HomeControllerService implements HomeControllerServiceInterface
 
     public function batchCancel()
     {
-        if (!empty(session('batchId'))) {
-            $batch = Bus::findBatch(session('batchId'));
-            $batch->cancel();
-            \App\Models\Batch::updateOrCreate([
-                'id_batch' => $batch->id
-            ], [
-                'canceled' => true
-            ]);
-            return BatchLogsResource::collection(\App\Models\Batch::all());
-        } else {
-
-            return response('Session is over. Try start.', 500);
-        }
+        session()->invalidate();
+//
+//        if (!empty(session('batchId'))) {
+//            $batch = Bus::findBatch(session('batchId'));
+//            $batch->cancel();
+//            \App\Models\Batch::updateOrCreate([
+//                'id_batch' => $batch->id
+//            ], [
+//                'canceled' => true
+//            ]);
+//            return BatchLogsResource::collection(\App\Models\Batch::all());
+//        } else {
+//
+//            return response('Session is over. Try start.', 500);
+//        }
     }
 }

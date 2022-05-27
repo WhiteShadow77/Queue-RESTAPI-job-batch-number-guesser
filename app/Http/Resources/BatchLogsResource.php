@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Batch;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BatchLogsResource extends JsonResource
@@ -17,11 +18,7 @@ class BatchLogsResource extends JsonResource
         if ($this->canceled) {
             $status = 'canceled';
         } else {
-            if ($this->status) {
-                $status = 'finished';
-            } else {
-                $status = 'not finished';
-            }
+            $status = sizeof($this->logs) > 0 ? $this->logs->pluck('result') : 'in process';
         }
         return [
             'id' => $this->id,
