@@ -1,5 +1,5 @@
 ## Queue-RESTAPI-batch-job-number-guesser-several-times
-The application can help you learn how a batch of jobs in  queue works. Web app runs
+The application can help you feel how a batch of jobs in  queue works. Web app runs
 a queue on server with a batch of jobs. Jobs are trying to guess a number by equaling
 a generated randomly number with a number had input. Data to manage a batch has 
 stored in config or can be inputed through a request, there is used RESTAPI. Executing
