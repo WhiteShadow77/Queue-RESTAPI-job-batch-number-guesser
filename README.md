@@ -14,7 +14,7 @@ Having a batch's id user are able to rerun the batch using artisan commands.
     * tries=x, x is number of tries in all the chain's links
     * guess_number=x, x is number app will try to guess in all the chain's links
     * range[start]=x&range[end]=y, x and y is numbers describes start of the range and end respectively
-    * backoff
+    * backoff=x, x is time in seconds which queue waits between the jobs.
 
 * GET http://localhost:80/api/logs
   Outputs history of trying guess process. Can receive a parameter:
