@@ -21,7 +21,7 @@ Having a batch's id user are able to rerun the batch using artisan commands.
     * transaction=x, where x is number of transaction you want to see.
 
 * GET http://localhost:80/api/progress
-  Output the current information about the executing process: batch's id, succeeded, failed jobs, common progress.
+  Output the current information about the executing process: batch's id, succeeded, failed jobs, common progress level.
 
 * GET http://localhost:80/api/logs/clear
   Clear all the logs
