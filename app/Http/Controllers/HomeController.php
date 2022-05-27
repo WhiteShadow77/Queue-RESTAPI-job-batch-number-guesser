@@ -33,13 +33,13 @@ class HomeController extends Controller
         return $this->queueControllerService->clear();
     }
 
-    public function batchInfo()
+    public function info()
     {
-        return $this->queueControllerService->batchInfo();
+        return $this->queueControllerService->info();
     }
 
-    public function batchCancel()
+    public function cancel()
     {
-        return $this->queueControllerService->batchCancel();
+        return $this->queueControllerService->cancel();
     }
 }

@@ -11,6 +11,6 @@ interface HomeControllerServiceInterface
     public function show(Request $request);
     public function start(Request $request);
     public function clear();
-    public function batchInfo();
-    public function batchCancel();
+    public function info();
+    public function cancel();
 }

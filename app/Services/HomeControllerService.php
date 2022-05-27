@@ -64,10 +64,11 @@ class HomeControllerService implements HomeControllerServiceInterface
         return response('Cleared', 200);
     }
 
-    public function batchInfo()
+    public function info()
     {
         if (!empty(session('batchId'))) {
             $batch = Bus::findBatch(session('batchId'));
+            if (!$batch->cancelled()) {
                 \App\Models\Batch::updateOrCreate([
                     'id_batch' => $batch->id
                 ], [
@@ -77,28 +78,27 @@ class HomeControllerService implements HomeControllerServiceInterface
                     'failed' => $batch->failedJobs,
                     'status' => $batch->finished()
                 ]);
+            }
             return BatchLogsResource::collection(\App\Models\Batch::all());
         } else {
             return response('Session is over. Try start.', 500);
         }
     }
 
-    public function batchCancel()
+    public function cancel()
     {
-        session()->invalidate();
-//
-//        if (!empty(session('batchId'))) {
-//            $batch = Bus::findBatch(session('batchId'));
-//            $batch->cancel();
-//            \App\Models\Batch::updateOrCreate([
-//                'id_batch' => $batch->id
-//            ], [
-//                'canceled' => true
-//            ]);
-//            return BatchLogsResource::collection(\App\Models\Batch::all());
-//        } else {
-//
-//            return response('Session is over. Try start.', 500);
-//        }
+        if (!empty(session('batchId'))) {
+            $batch = Bus::findBatch(session('batchId'));
+            $batch->cancel();
+            \App\Models\Batch::updateOrCreate([
+                'id_batch' => $batch->id
+            ], [
+                'canceled' => true
+            ]);
+            return BatchLogsResource::collection(\App\Models\Batch::all());
+        } else {
+
+            return response('Session is over. Try start.', 500);
+        }
     }
 }
