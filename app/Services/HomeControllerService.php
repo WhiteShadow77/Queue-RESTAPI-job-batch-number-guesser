@@ -89,18 +89,22 @@ class HomeControllerService implements HomeControllerServiceInterface
     {
         if (!empty(session('batchId'))) {
             $batch = Bus::findBatch(session('batchId'));
-            $batch->cancel();
-            \App\Models\Batch::updateOrCreate([
-                'id_batch' => $batch->id
-            ], [
-                'progress' => $batch->progress(),
-                'jobs' => $batch->totalJobs,
-                'successed' => $batch->processedJobs(),
-                'failed' => $batch->failedJobs,
-                'status' => $batch->finished(),
-                'canceled' => true
-            ]);
-            return BatchLogsResource::collection(\App\Models\Batch::all());
+            if(!is_null($batch)) {
+                $batch->cancel();
+                \App\Models\Batch::updateOrCreate([
+                    'id_batch' => $batch->id
+                ], [
+                    'progress' => $batch->progress(),
+                    'jobs' => $batch->totalJobs,
+                    'successed' => $batch->processedJobs(),
+                    'failed' => $batch->failedJobs,
+                    'status' => $batch->finished(),
+                    'canceled' => true
+                ]);
+                return BatchLogsResource::collection(\App\Models\Batch::all());
+            } else {
+                return response('The batch is not started.', 500);
+            }
         } else {
 
             return response('Session is over. Try start.', 500);
