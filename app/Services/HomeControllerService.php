@@ -93,6 +93,11 @@ class HomeControllerService implements HomeControllerServiceInterface
             \App\Models\Batch::updateOrCreate([
                 'id_batch' => $batch->id
             ], [
+                'progress' => $batch->progress(),
+                'jobs' => $batch->totalJobs,
+                'successed' => $batch->processedJobs(),
+                'failed' => $batch->failedJobs,
+                'status' => $batch->finished(),
                 'canceled' => true
             ]);
             return BatchLogsResource::collection(\App\Models\Batch::all());
