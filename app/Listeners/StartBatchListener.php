@@ -28,8 +28,6 @@ class StartBatchListener
      */
     public function handle(StartBatchEvent $event)
     {
-        //session(['status' => 'in process']);
-
         $batch = Bus::batch($event->chain)
             ->then(function (Batch $batch) {
                 // Все задания успешно завершены ...
