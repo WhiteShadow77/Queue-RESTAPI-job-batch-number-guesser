@@ -58,12 +58,7 @@ class GuessJob implements ShouldQueue
             $this->args['range']['end']
         );
         if ($this->randNumber != $this->args['guessNumber']) {
-//            Log::create([
-//                'transaction' => $this->transaction,
-//                'guessNumber' => $this->args['guessNumber'],
-//                'randNumber' => $this->randNumber,
-//                'status' => 'Failed'
-//            ]);
+
             event(new FailedJobEvent
             (
                 $this->randNumber,
@@ -80,14 +75,6 @@ class GuessJob implements ShouldQueue
             ];
             throw new Exception(json_encode($message, true));
         } else {
-
-//            Log::create([
-//                'transaction' => $this->transaction,
-//                'guessNumber' => $this->args['guessNumber'],
-//                'randNumber' => $this->randNumber,
-//                'status' => 'OK'
-//            ]);
-
 
             event(new SuccessJobEvent
             (
