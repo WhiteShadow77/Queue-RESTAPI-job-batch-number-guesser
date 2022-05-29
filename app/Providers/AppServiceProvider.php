@@ -16,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(HomeControllerServiceInterface::class, function(){
-            return new HomeControllerService;
+        $this->app->singleton(HomeControllerServiceInterface::class, function () {
+            return new HomeControllerService();
         });
 
         JsonResource::withoutWrapping();

@@ -8,7 +8,9 @@ use Illuminate\Queue\SerializesModels;
 
 class FailedJobEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public int $randNumber;
     public int $guessNumber;

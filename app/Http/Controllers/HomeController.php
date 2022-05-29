@@ -10,11 +10,9 @@ class HomeController extends Controller
 {
     protected $queueControllerService;
 
-    public function __construct
-    (
+    public function __construct(
         HomeControllerServiceInterface $queueControllerService
-    )
-    {
+    ) {
         $this->queueControllerService = $queueControllerService;
     }
 

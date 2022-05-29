@@ -9,7 +9,10 @@ use Illuminate\Queue\SerializesModels;
 
 class FailedExceptionEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
+
     public Exception $exception;
     /**
      * Create a new event instance.

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Events\StartBatchEvent;
@@ -106,7 +105,6 @@ class HomeControllerService implements HomeControllerServiceInterface
                 return response('The batch is not started.', 500);
             }
         } else {
-
             return response('Session is over. Try start.', 500);
         }
     }

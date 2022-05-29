@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Batch;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BatchLogsResource extends JsonResource
