@@ -23,7 +23,7 @@ class StartBatchListener
     /**
      * Handle the event.
      *
-     * @param  \App\Events\StartBatchEvent  $event
+     * @param \App\Events\StartBatchEvent $event
      * @return void
      */
     public function handle(StartBatchEvent $event)
@@ -33,7 +33,7 @@ class StartBatchListener
                 // Все задания успешно завершены ...
                 BatchLog::create([
                     'result' => 'All OK',
-                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch', '=', $batch->id)->first()->id
                 ]);
                 session(['status' => 'All OK']);
             })->catch(function (Batch $batch, Throwable $e) {
@@ -41,14 +41,14 @@ class StartBatchListener
                 BatchLog::create([
                     'result' => 'Failed',
                     'message' => $e->getMessage(),
-                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch', '=', $batch->id)->first()->id
                 ]);
                 session(['status' => 'Failed']);
             })->finally(function (Batch $batch) {
                 // Завершено выполнение пакета ...
                 BatchLog::create([
                     'result' => 'Batch finished',
-                    'batchId' => \App\Models\Batch::where('id_batch','=', $batch->id)->first()->id
+                    'batchId' => \App\Models\Batch::where('id_batch', '=', $batch->id)->first()->id
                 ]);
                 session(['status' => 'Finished']);
             })->allowFailures()->dispatch();

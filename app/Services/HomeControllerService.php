@@ -89,7 +89,7 @@ class HomeControllerService implements HomeControllerServiceInterface
     {
         if (!empty(session('batchId'))) {
             $batch = Bus::findBatch(session('batchId'));
-            if(!is_null($batch)) {
+            if (!is_null($batch)) {
                 $batch->cancel();
                 \App\Models\Batch::updateOrCreate([
                     'id_batch' => $batch->id
